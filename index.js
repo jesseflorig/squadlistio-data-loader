@@ -5,10 +5,11 @@ import jsonloader from 'jsonloader'
 
 
 const client = new Lokka({
-  transport: new Transport('https://api.graph.cool/simple/v1/cj0bgunelehlb0148ye2ovsgn')
+  // add  your Graphcool endpoint key
+  transport: new Transport('https://api.graph.cool/simple/v1/__YOUR_KEY')
 });
 
-//set timezone to UTC for Graphcool
+// set timezone to UTC for Graphcool
 process.env.TZ = 'UTC';
 
 // git clone git@github.com:guidokessels/xwing-data.git
