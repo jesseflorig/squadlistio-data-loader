@@ -12,7 +12,7 @@ const client = new Lokka({
 process.env.TZ = 'UTC';
 
 // git clone git@github.com:guidokessels/xwing-data.git
-const rawShips = new jsonloader('data/ships.js');
+const rawShips = new jsonloader('../xwing-data/data/ships.js');
 
 const allFactions = chain(rawShips)
   .flatMap(rawShip => rawShip.faction)
