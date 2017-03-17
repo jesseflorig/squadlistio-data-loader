@@ -1,0 +1,19 @@
+{
+  "name": "squadlistio-data-loader",
+  "version": "1.0.0",
+  "description": "data loader for squadlistio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jesseflorig/squadlistio-data-loader.git"
+  },
+  "author": "Jesse Florig",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jesseflorig/squadlistio-data-loader/issues"
+  },
+  "homepage": "https://github.com/jesseflorig/squadlistio-data-loader#readme"
+}
