@@ -20,6 +20,7 @@
   "dependencies": {
     "babel-cli": "^6.24.0",
     "babel-preset-node6": "^11.0.0",
+    "jsonloader": "^1.0.1",
     "lodash": "^4.17.4",
     "lokka": "^1.7.0",
     "lokka-transport-http": "^1.6.1"
