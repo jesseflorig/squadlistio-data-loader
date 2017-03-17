@@ -1,6 +1,6 @@
 import Lokka from 'lokka';
 import Transport from 'lokka-transport-http';
-import {chain, flatMap, uniq, value} from 'lodash';
+import {chain, flatMap, uniq, value, omitBy, isNil} from 'lodash';
 import jsonloader from 'jsonloader'
 
 
@@ -14,10 +14,19 @@ process.env.TZ = 'UTC';
 
 // git clone git@github.com:guidokessels/xwing-data.git
 const rawShips = new jsonloader('../xwing-data/data/ships.js');
+const rawPilots = new jsonloader('../xwing-data/data/pilots.js');
 
-const allFactions = chain(rawShips)
-  .flatMap(rawShip => rawShip.faction)
-  .uniq()
-  .value();
+const uniqFlatMap = (data, key) => {
+  return chain(data)
+    .flatMap(item => item[key])
+    .uniq()
+    .value()
+}
+
+const allFactions = uniqFlatMap(rawShips, 'faction')
+const allActions = uniqFlatMap(rawShips, 'actions')
+const allSlots = uniqFlatMap(rawPilots, 'slots')
 
 console.log('all factions:',allFactions);
+console.log('all actions:',allActions);
+console.log('all slots:',allSlots);
