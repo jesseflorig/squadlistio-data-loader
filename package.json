@@ -4,10 +4,13 @@
   "description": "data loader for squadlistio",
   "main": "index.js",
   "babel": {
-    "presets": ["es2015", "stage-3"]
+    "presets": [
+      "es2015",
+      "stage-3"
+    ]
   },
   "scripts": {
-    "start": "./node_modules/babel-cli/bin/babel-node.js index.js",
+    "start": "NODE_ENV=dev ./node_modules/babel-cli/bin/babel-node.js index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
