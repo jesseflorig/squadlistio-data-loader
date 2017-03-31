@@ -2,11 +2,14 @@ import Lokka from 'lokka';
 import Transport from 'lokka-transport-http';
 import {chain, flatMap, uniq, value, omitBy, isNil} from 'lodash';
 import jsonloader from 'jsonloader'
+import config from 'config'
 
+
+const graphCoolKey = config.get('grahpcool.key')
 
 const client = new Lokka({
   // add  your Graphcool endpoint key
-  transport: new Transport('https://api.graph.cool/simple/v1/__YOUR_KEY')
+  transport: new Transport(`https://api.graph.cool/simple/v1/${graphCoolKey}`)
 });
 
 // set timezone to UTC for Graphcool
