@@ -4,6 +4,7 @@ import {chain, flatMap, uniq, value, omitBy, isNil, zipObject} from 'lodash';
 import jsonloader from 'jsonloader'
 import config from 'config'
 import {createShips} from './ships'
+import {createUpgrades} from './upgrades'
 
 const graphCoolKey = config.get('graphcool.key')
 
@@ -19,6 +20,7 @@ const main = async() => {
   // git clone git@github.com:guidokessels/xwing-data.git
   const rawShips = new jsonloader('../xwing-data/data/ships.js')
   const rawPilots = new jsonloader('../xwing-data/data/pilots.js')
+  const rawUpgrades = new jsonloader('../xwing-data/data/upgrades.js')
 
   const uniqFlatMap = (data, key) => {
     return chain(data)
@@ -33,8 +35,11 @@ const main = async() => {
   const allActions = uniqFlatMap(rawShips, 'actions')
   const allSlots = uniqFlatMap(rawPilots, 'slots')
 
-  const createdShips = await createShips(rawShips, client)
+  // const createdShips = await createShips(rawShips, client)
   console.log(`Created ${createdShips.length} new ships.`)
+
+  const createdUpgrades = await createUpgrades(rawUpgrades, client)
+  console.log(`Created ${createdUpgrades.length} new upgrades.`)
 }
 
 main().catch(e => console.log(e))
