@@ -20,6 +20,7 @@ const uniqFlatMap = (data, key) => {
   return chain(data)
     .flatMap(item => item[key])
     .uniq()
+    .compact()
     .value()
 }
 
