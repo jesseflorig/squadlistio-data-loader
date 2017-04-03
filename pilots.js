@@ -1,3 +1,5 @@
+import {zipObject} from 'lodash'
+
 // create pilots
 const createPilot = async (pilot: Pilot, client: Client) => {
   const {id: oldId, name, unique = false, skill, points, text='', faction, xws} = pilot
@@ -46,20 +48,18 @@ const findPilot = async (pilot: Pilot, client: Client) => {
 }
 
 export const createPilots = async (rawPilots: Pilot[], client: Client): Promise<IdMap> => {
-  const createdPilots = []
-  await Promise.all(rawPilots.map( async(pilot) => {
+  const pilotIds = await Promise.all(rawPilots.map( async(pilot) => {
 
     // check if pilot already exists
-    const isExistingPilot = await findPilot(pilot, client).then(r => {
-      return r.allPilots.length > 0
-    })
+    const existingPiliot = await findPilot(pilot, client)
 
     // if pilot doesn't exist, create it
-    if (!isExistingPilot) {
-      const createdPilot = await createPilot(pilot, client)
-      createdPilots.push(createdPilot)
+    if (existingPiliot.allPilots.length === 0) {
+      return await createPilot(pilot, client)
+    } else {
+      return existingPiliot.allPilots[0].id
     }
   }))
 
-  return createdPilots
+  return zipObject(rawPilots.map(pilot => pilot.id), pilotIds)
 }

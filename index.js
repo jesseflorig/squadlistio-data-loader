@@ -3,8 +3,8 @@ import Transport from 'lokka-transport-http';
 import {chain, flatMap, uniq, value, omitBy, isNil, zipObject} from 'lodash';
 import jsonloader from 'jsonloader'
 import config from 'config'
-import {createShips} from './ships'
 import {createPilots} from './pilots'
+import {createShips, connectShipsAndPilots} from './ships'
 import {createUpgrades} from './upgrades'
 
 const graphCoolKey = config.get('graphcool.key')
@@ -31,17 +31,30 @@ const main = async() => {
       .value()
   }
 
+  const allShips = uniqFlatMap(rawShips, 'name')
+  const allFactions = uniqFlatMap(rawShips, 'faction')
+  const allActions = uniqFlatMap(rawShips, 'actions')
+  const allSlots = uniqFlatMap(rawPilots, 'slots')
+  const allPilots = uniqFlatMap(rawPilots, 'id')
+
   // ingest ships
   const createdShips = await createShips(rawShips, client)
-  console.log(`Created ${createdShips.length} new ships.`)
+  console.log(`Created ${Object.keys(createdShips).length} new ships.`)
 
   // ingest pilots
   const createdPilots = await createPilots(rawPilots, client)
-  console.log(`Created ${createdPilots.length} new pilots.`)
+  console.log(`Created ${Object.keys(createdPilots).length} new pilots.`)
 
   // ingest upgrades
   const createdUpgrades = await createUpgrades(rawUpgrades, client)
   console.log(`Created ${createdUpgrades.length} new upgrades.`)
+
+  const connectedPilots = await connectShipsAndPilots(rawShips, createdShips, rawPilots, createdPilots, client)
+  console.log(connectedPilots)
+  // console.log(`Created ${Object.keys(shipIdMap).length} ships.`)
+  //
+  // const createdUpgrades = await createUpgrades(rawUpgrades, client)
+  // console.log(`Created ${createdUpgrades.length} new upgrades.`)
 }
 
 main().catch(e => console.log(e))
