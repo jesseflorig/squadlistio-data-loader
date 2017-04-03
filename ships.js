@@ -1,4 +1,4 @@
-import {zipObject, chain, flatMap, map, filter} from 'lodash'
+import {zipObject, chain, map, filter} from 'lodash'
 
 // create ships
 const createShip = async (ship: Ship, client: Client) => {

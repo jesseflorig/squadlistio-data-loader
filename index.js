@@ -6,6 +6,7 @@ import config from 'config'
 import {createPilots} from './pilots'
 import {createShips, connectShipsAndPilots} from './ships'
 import {createUpgrades} from './upgrades'
+import {createFactions, factionListToObj} from './factions'
 
 const graphCoolKey = config.get('graphcool.key')
 
@@ -31,11 +32,11 @@ const main = async() => {
       .value()
   }
 
-  const allShips = uniqFlatMap(rawShips, 'name')
-  const allFactions = uniqFlatMap(rawShips, 'faction')
-  const allActions = uniqFlatMap(rawShips, 'actions')
-  const allSlots = uniqFlatMap(rawPilots, 'slots')
-  const allPilots = uniqFlatMap(rawPilots, 'id')
+  // ingest factions
+  const allFactions = uniqFlatMap(rawPilots, 'faction')
+  const rawFactions = factionListToObj(allFactions)
+  const createdFactions = await createFactions(rawFactions, client)
+  console.log(`Created ${Object.keys(createdFactions).length} new factions.`)
 
   // ingest ships
   const createdShips = await createShips(rawShips, client)
