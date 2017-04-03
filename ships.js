@@ -1,3 +1,5 @@
+import {zipObject, chain, flatMap, map, filter} from 'lodash'
+
 // create ships
 const createShip = async (ship: Ship, client: Client) => {
   const result = await client.mutate(`{
@@ -32,21 +34,50 @@ const findShip = async (ship: Ship, client: Client) => {
   return result
 }
 
+export const connectShipsAndPilots = async(rawShips, newShips, rawPilots, newPilots, client) => {
+  return await map(rawShips, async(ship) => {
+    const newShipId = newShips[ship.id]
+    const newPilotIds = chain(rawPilots)
+      .filter(pilot => {
+        return pilot.ship === ship.name
+      })
+      .map(pilot => {
+        return newPilots[pilot.id]
+      })
+      .value()
+
+    return await map(newPilotIds, async(newPilotId) => {
+      const connectedShip = await connectShipsAndPilotsMutation(newShipId, newPilotId, client)
+      return connectedShip
+    })
+  })
+}
+
+const connectShipsAndPilotsMutation = async(shipId, pilotId, client) => {
+  const result = await client.mutate(`{
+      addToShipPilots(shipShipId: "${shipId}" pilotsPilotId: "${pilotId}") {
+        pilotsPilot{
+          id
+        }
+      }
+    }`)
+
+  return result
+}
+
 export const createShips = async (rawShips: Ship[], client: Client): Promise<IdMap> => {
-  const createdShips = []
-  await Promise.all(rawShips.map( async(ship) => {
+  const shipIds = await Promise.all(rawShips.map( async(ship) => {
 
     // check if ship already exists
-    const isExistingShip = await findShip(ship, client).then(r => {
-      return r.allShips.length > 0
-    })
+    const existingShip = await findShip(ship, client)
 
     // if ship doesn't exist, create it
-    if (!isExistingShip) {
-      const createdShip = await createShip(ship, client)
-      createdShips.push(createdShip)
+    if (existingShip.allShips.length === 0) {
+      return await createShip(ship, client)
+    } else {
+      return existingShip.allShips[0].id
     }
   }))
 
-  return createdShips
+  return zipObject(rawShips.map(ship => ship.id), shipIds)
 }
