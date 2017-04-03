@@ -50,11 +50,6 @@ const main = async() => {
   console.log(`Created ${createdUpgrades.length} new upgrades.`)
 
   const connectedPilots = await connectShipsAndPilots(rawShips, createdShips, rawPilots, createdPilots, client)
-  console.log(connectedPilots)
-  // console.log(`Created ${Object.keys(shipIdMap).length} ships.`)
-  //
-  // const createdUpgrades = await createUpgrades(rawUpgrades, client)
-  // console.log(`Created ${createdUpgrades.length} new upgrades.`)
 }
 
 main().catch(e => console.log(e))
