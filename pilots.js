@@ -2,7 +2,7 @@ import {zipObject} from 'lodash'
 
 // create pilots
 const createPilot = async (pilot: Pilot, client: Client) => {
-  const {id: oldId, name, unique = false, skill, points, text='', faction, xws} = pilot
+  const {id: oldId, name, unique = false, skill, points, image, text='', faction, xws} = pilot
 
   const skillFix = typeof skill == 'number' ? skill : 0
   const pointsFix = typeof points == 'number' ? points : 0
@@ -14,6 +14,7 @@ const createPilot = async (pilot: Pilot, client: Client) => {
       unique: ${unique},
       skill: ${skillFix},
       points: ${pointsFix},
+      image: "${image}",
       text: "${text.replace(/"/g, '&quote;')}",
       faction: "${faction}",
       xws: "${xws}"
