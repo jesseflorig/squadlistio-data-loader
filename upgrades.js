@@ -16,7 +16,7 @@ const createUpgrade = async (upgrade: Upgrade, client: Client) => {
       oldId: ${id},
       attack: ${attack},
       images: "${image}",
-      name: "${name.replace(/"/g, '&quote;')}}",
+      name: "${name.replace(/"/g, '&quote;')}",
       points: ${points},
       range: "${range}",
       text: "${text.replace(/"/g, '&quote;')}",
