@@ -6,6 +6,7 @@ import config from 'config'
 import {createPilots} from './pilots'
 import {createShips, connectShipsAndPilots} from './ships'
 import {createUpgrades} from './upgrades'
+import {createConditions} from './conditions'
 import {createFactions, factionListToObj} from './factions'
 import {createSlots, slotListToObj} from './slots'
 
@@ -24,6 +25,7 @@ const main = async() => {
   const rawShips = new jsonloader('../xwing-data/data/ships.js')
   const rawPilots = new jsonloader('../xwing-data/data/pilots.js')
   const rawUpgrades = new jsonloader('../xwing-data/data/upgrades.js')
+  const rawConditions = new jsonloader('../xwing-data/data/conditions.js')
 
   const uniqFlatMap = (data, key) => {
     return chain(data)
@@ -57,6 +59,12 @@ const main = async() => {
   const createdUpgrades = await createUpgrades(rawUpgrades, client)
   console.log(`Created ${createdUpgrades.length} new upgrades.`)
 
+  // ingest conditions
+  const createdConditions = await createConditions(rawConditions, client)
+  console.log(`Created ${Object.keys(createdConditions).length} new conditions.`)
+
+
+  // connect ships and pilots
   const connectedPilots = await connectShipsAndPilots(rawShips, createdShips, rawPilots, createdPilots, client)
 }
 
