@@ -9,6 +9,7 @@ import {createUpgrades} from './upgrades'
 import {createConditions} from './conditions'
 import {createFactions, factionListToObj} from './factions'
 import {createSlots, slotListToObj} from './slots'
+import {createReferences} from './references'
 
 const graphCoolKey = config.get('graphcool.key')
 
@@ -26,6 +27,7 @@ const main = async() => {
   const rawPilots = new jsonloader('../xwing-data/data/pilots.js')
   const rawUpgrades = new jsonloader('../xwing-data/data/upgrades.js')
   const rawConditions = new jsonloader('../xwing-data/data/conditions.js')
+  const rawReferences = new jsonloader('../xwing-data/data/reference-cards.js')
 
   const uniqFlatMap = (data, key) => {
     return chain(data)
@@ -63,6 +65,9 @@ const main = async() => {
   const createdConditions = await createConditions(rawConditions, client)
   console.log(`Created ${Object.keys(createdConditions).length} new conditions.`)
 
+  // ingest references
+  const createdReferences = await createReferences(rawReferences, client)
+  console.log(`Created ${Object.keys(createdReferences).length} new references.`)
 
   // connect ships and pilots
   const connectedPilots = await connectShipsAndPilots(rawShips, createdShips, rawPilots, createdPilots, client)
