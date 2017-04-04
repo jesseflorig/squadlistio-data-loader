@@ -46,13 +46,13 @@ export const createConditions = async (rawConditions: Condition[], client: Clien
   const conditionIds = await Promise.all(rawConditions.map( async(condition) => {
 
     // check if condition already exists
-    const existingPiliot = await findCondition(condition, client)
+    const existingCondition = await findCondition(condition, client)
 
     // if condition doesn't exist, create it
-    if (existingPiliot.allConditions.length === 0) {
+    if (existingCondition.allConditions.length === 0) {
       return await createCondition(condition, client)
     } else {
-      return existingPiliot.allConditions[0].id
+      return existingCondition.allConditions[0].id
     }
   }))
 

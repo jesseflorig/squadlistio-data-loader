@@ -10,6 +10,7 @@ import {createConditions} from './conditions'
 import {createFactions, factionListToObj} from './factions'
 import {createSlots, slotListToObj} from './slots'
 import {createReferences} from './references'
+import {createDamages} from './damages'
 
 const graphCoolKey = config.get('graphcool.key')
 
@@ -28,6 +29,7 @@ const main = async() => {
   const rawUpgrades = new jsonloader('../xwing-data/data/upgrades.js')
   const rawConditions = new jsonloader('../xwing-data/data/conditions.js')
   const rawReferences = new jsonloader('../xwing-data/data/reference-cards.js')
+  const rawDamages = new jsonloader('../xwing-data/data/damage-deck-core-tfa.js')
 
   const uniqFlatMap = (data, key) => {
     return chain(data)
@@ -67,7 +69,11 @@ const main = async() => {
 
   // ingest references
   const createdReferences = await createReferences(rawReferences, client)
-  console.log(`Created ${Object.keys(createdReferences).length} new references.`)
+  console.log(`Created ${Object.keys(createdReferences).length} new reference cards.`)
+
+  // ingest damages
+  const createdDamages = await createDamages(rawDamages, client)
+  console.log(`Created ${Object.keys(createdDamages).length} new damage cards.`)
 
   // connect ships and pilots
   const connectedPilots = await connectShipsAndPilots(rawShips, createdShips, rawPilots, createdPilots, client)

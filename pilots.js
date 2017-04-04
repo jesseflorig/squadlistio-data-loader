@@ -51,13 +51,13 @@ export const createPilots = async (rawPilots: Pilot[], client: Client): Promise<
   const pilotIds = await Promise.all(rawPilots.map( async(pilot) => {
 
     // check if pilot already exists
-    const existingPiliot = await findPilot(pilot, client)
+    const existingPilot = await findPilot(pilot, client)
 
     // if pilot doesn't exist, create it
-    if (existingPiliot.allPilots.length === 0) {
+    if (existingPilot.allPilots.length === 0) {
       return await createPilot(pilot, client)
     } else {
-      return existingPiliot.allPilots[0].id
+      return existingPilot.allPilots[0].id
     }
   }))
 
