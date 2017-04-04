@@ -44,13 +44,13 @@ export const createReferences = async (rawReferences: Reference[], client: Clien
   const referenceIds = await Promise.all(rawReferences.map( async(reference) => {
 
     // check if reference already exists
-    const existingPiliot = await findReference(reference, client)
+    const existingReference = await findReference(reference, client)
 
     // if reference doesn't exist, create it
-    if (existingPiliot.allReferences.length === 0) {
+    if (existingReference.allReferences.length === 0) {
       return await createReference(reference, client)
     } else {
-      return existingPiliot.allReferences[0].id
+      return existingReference.allReferences[0].id
     }
   }))
 
