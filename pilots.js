@@ -68,14 +68,14 @@ export const connectPilotsAndSlots = async(rawPilots, newPilots, rawSlots, newSl
 }
 
 const connectPilotsAndSlotsMutation = async(pilotId, slotId, client) => {
-  // console.log(`${pilotId} -> ${slotId}`)
+  console.log(`${slotId} -> ${pilotId}`)
   const result = await client.mutate(`{
-    addToPilotOnSlot(slotsSlotId:"${slotId}" pilotsPilotId:"${pilotId}"){
+    addToPilotOnSlot(slotsSlotId:"${slotId}" pilotsPilotId:"${pilotId}") {
       slotsSlot {
         id
       }
-    }`)
-  console.log(result)
+    }
+  }`)
   return result
 }
 
