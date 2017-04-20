@@ -65,6 +65,37 @@ const connectShipsAndPilotsMutation = async(shipId, pilotId, client) => {
   return result
 }
 
+export const connectShipsAndFactions = async(rawShips, newShips, rawFactions, newFactions, client) => {
+  return await map(rawShips, async(ship) => {
+    const newShipId = newShips[ship.id]
+    const newFactionIds = chain(rawFactions)
+      .filter(faction => {
+        return ship.faction.includes(faction.name)
+      })
+      .map(faction => {
+        return newFactions[faction.name]
+      })
+      .value()
+
+    return await map(newFactionIds, async(newFactionId) => {
+      const connectedShip = await connectShipsAndFactionsMutation(newShipId, newFactionId, client)
+      return connectedShip
+    })
+  })
+}
+
+const connectShipsAndFactionsMutation = async(shipId, factionId, client) => {
+  const result = await client.mutate(`{
+      addToFactionShips(shipsShipId: "${shipId}" factionFactionId: "${factionId}") {
+        factionFaction{
+          id
+        }
+      }
+    }`)
+
+  return result
+}
+
 export const createShips = async (rawShips: Ship[], client: Client): Promise<IdMap> => {
   const shipIds = await Promise.all(rawShips.map( async(ship) => {
 
