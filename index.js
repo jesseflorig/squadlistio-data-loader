@@ -3,8 +3,13 @@ import Transport from 'lokka-transport-http';
 import {chain, flatMap, uniq, value, omitBy, isNil, zipObject} from 'lodash';
 import jsonloader from 'jsonloader'
 import config from 'config'
+<<<<<<< Updated upstream
 import {createPilots} from './pilots'
 import {createShips, connectShipsAndPilots, connectShipsAndFactions} from './ships'
+=======
+import {createPilots, connectPilotsAndSlots} from './pilots'
+import {createShips, connectShipsAndPilots} from './ships'
+>>>>>>> Stashed changes
 import {createUpgrades} from './upgrades'
 import {createConditions} from './conditions'
 import {createFactions, factionListToObj} from './factions'
@@ -41,11 +46,11 @@ const main = async() => {
       .value()
   }
 
-  // ingest factions
-  const allFactions = uniqFlatMap(rawPilots, 'faction')
-  const rawFactions = factionListToObj(allFactions)
-  const createdFactions = await createFactions(rawFactions, client)
-  console.log(`Created ${Object.keys(createdFactions).length} new factions.`)
+  // // ingest factions
+  // const allFactions = uniqFlatMap(rawPilots, 'faction')
+  // const rawFactions = factionListToObj(allFactions)
+  // const createdFactions = await createFactions(rawFactions, client)
+  // console.log(`Created ${Object.keys(createdFactions).length} new factions.`)
 
   // ingest slots
   const allSlots = uniqFlatMap(rawPilots, 'slots')
@@ -53,41 +58,44 @@ const main = async() => {
   const createdSlots = await createSlots(rawSlots, client)
   console.log(`Created ${Object.keys(createdSlots).length} new slots.`)
 
-  // ingest ships
-  const createdShips = await createShips(rawShips, client)
-  console.log(`Created ${Object.keys(createdShips).length} new ships.`)
+  // // ingest ships
+  // const createdShips = await createShips(rawShips, client)
+  // console.log(`Created ${Object.keys(createdShips).length} new ships.`)
 
   // ingest pilots
   const createdPilots = await createPilots(rawPilots, client)
   console.log(`Created ${Object.keys(createdPilots).length} new pilots.`)
 
-  // ingest upgrades
-  const createdUpgrades = await createUpgrades(rawUpgrades, client)
-  console.log(`Created ${createdUpgrades.length} new upgrades.`)
+  // // ingest upgrades
+  // const createdUpgrades = await createUpgrades(rawUpgrades, client)
+  // console.log(`Created ${createdUpgrades.length} new upgrades.`)
+  //
+  // // ingest conditions
+  // const createdConditions = await createConditions(rawConditions, client)
+  // console.log(`Created ${Object.keys(createdConditions).length} new conditions.`)
+  //
+  // // ingest reference cards
+  // const createdReferences = await createReferences(rawReferences, client)
+  // console.log(`Created ${Object.keys(createdReferences).length} new reference cards.`)
+  //
+  // // ingest damage cards
+  // const createdDamages = await createDamages(rawDamages, client)
+  // console.log(`Created ${Object.keys(createdDamages).length} new damage cards.`)
+  //
+  // // ingest products
+  // const createdProducts = await createProducts(rawProducts, client)
+  // console.log(`Created ${Object.keys(createdProducts).length} new products`)
+  //
+  // // connect ships and pilots
+  // const connectedPilots = await connectShipsAndPilots(rawShips, createdShips, rawPilots, createdPilots, client)
+  //
+  // // connect ships and factions
+  // const connectedFactions = await connectShipsAndFactions(rawShips, createdShips, rawFactions, createdFactions, client)
+  // console.log(`Created ${Object.keys(connectedFactions).length} new ship -> faction connections`)
 
-  // ingest conditions
-  const createdConditions = await createConditions(rawConditions, client)
-  console.log(`Created ${Object.keys(createdConditions).length} new conditions.`)
+  // connect pilots and slots
+  const connectedSlots = await conntectPilotsAndSlots(rawPilots, createdPilots, rawSlots, createdSlots, client)
 
-  // ingest reference cards
-  const createdReferences = await createReferences(rawReferences, client)
-  console.log(`Created ${Object.keys(createdReferences).length} new reference cards.`)
-
-  // ingest damage cards
-  const createdDamages = await createDamages(rawDamages, client)
-  console.log(`Created ${Object.keys(createdDamages).length} new damage cards.`)
-
-  // ingest products
-  const createdProducts = await createProducts(rawProducts, client)
-  console.log(`Created ${Object.keys(createdProducts).length} new products`)
-
-  // connect ships and pilots
-  const connectedPilots = await connectShipsAndPilots(rawShips, createdShips, rawPilots, createdPilots, client)
-  console.log(`Created ${Object.keys(connectedPilots).length} new ship -> pilot connections`)
-
-  // connect ships and factions
-  const connectedFactions = await connectShipsAndFactions(rawShips, createdShips, rawFactions, createdFactions, client)
-  console.log(`Created ${Object.keys(connectedFactions).length} new ship -> faction connections`)
 }
 
 main().catch(e => console.log(e))
