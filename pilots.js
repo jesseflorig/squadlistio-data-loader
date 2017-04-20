@@ -1,4 +1,4 @@
-import {zipObject} from 'lodash'
+import {zipObject, chain, map, filter} from 'lodash'
 
 // create pilots
 const createPilot = async (pilot: Pilot, client: Client) => {
@@ -53,10 +53,10 @@ export const connectPilotsAndSlots = async(rawPilots, newPilots, rawSlots, newSl
     const newPilotId = newPilots[pilot.id]
     const newSlotIds = chain(rawSlots)
       .filter(slot => {
-        return slot.pilot === pilot.name
+        return pilot.slots.includes(slot.name)
       })
       .map(slot => {
-        return newSlots[slot.id]
+        return newSlots[slot.name]
       })
       .value()
 
@@ -68,14 +68,14 @@ export const connectPilotsAndSlots = async(rawPilots, newPilots, rawSlots, newSl
 }
 
 const connectPilotsAndSlotsMutation = async(pilotId, slotId, client) => {
+  // console.log(`${pilotId} -> ${slotId}`)
   const result = await client.mutate(`{
-      addToPilotOnSlot(pilotsPilotId: "${pilotId}" slotsSlotId: "${slotId}") {
-        slotsSlot{
-          id
-        }
+    addToPilotOnSlot(slotsSlotId:"${slotId}" pilotsPilotId:"${pilotId}"){
+      slotsSlot {
+        id
       }
     }`)
-
+  console.log(result)
   return result
 }
 

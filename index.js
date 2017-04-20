@@ -3,13 +3,8 @@ import Transport from 'lokka-transport-http';
 import {chain, flatMap, uniq, value, omitBy, isNil, zipObject} from 'lodash';
 import jsonloader from 'jsonloader'
 import config from 'config'
-<<<<<<< Updated upstream
-import {createPilots} from './pilots'
-import {createShips, connectShipsAndPilots, connectShipsAndFactions} from './ships'
-=======
 import {createPilots, connectPilotsAndSlots} from './pilots'
-import {createShips, connectShipsAndPilots} from './ships'
->>>>>>> Stashed changes
+import {createShips, connectShipsAndPilots, connectShipsAndFactions} from './ships'
 import {createUpgrades} from './upgrades'
 import {createConditions} from './conditions'
 import {createFactions, factionListToObj} from './factions'
@@ -94,7 +89,8 @@ const main = async() => {
   // console.log(`Created ${Object.keys(connectedFactions).length} new ship -> faction connections`)
 
   // connect pilots and slots
-  const connectedSlots = await conntectPilotsAndSlots(rawPilots, createdPilots, rawSlots, createdSlots, client)
+  const connectedSlots = await connectPilotsAndSlots(rawPilots, createdPilots, rawSlots, createdSlots, client)
+  console.log(`Created ${Object.keys(connectedSlots).length} new pilot -> slot connections`)
 
 }
 
