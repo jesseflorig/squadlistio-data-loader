@@ -1,11 +1,21 @@
 import {zipObject, map} from 'lodash'
 
+const parentLookup = {
+  'Rebel Alliance'   : 'REBEL',
+  'Resistance'       : 'REBEL',
+  'Galactic Empire'   : 'EMPIRE',
+  'First Order'      : 'EMPIRE',
+  'Scum and Villainy': 'SCUM',
+}
+
 // create factions
 const createFaction = async (faction: Faction, client: Client) => {
   const {name, xws} = faction
+  const parent = parentLookup[name] || '';
   const result = await client.mutate(`{
     faction: createFaction(
       name: "${name}",
+      parent: ${parent},
       xws: "${xws}"
     ){
       id
