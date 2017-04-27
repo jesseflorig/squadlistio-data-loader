@@ -18,9 +18,9 @@ const createReference = async (reference: Reference, client: Client) => {
   if(!result) {
     console.log(reference)
   }
-  else {
-    console.log(`Added ${title}`)
-  }
+  // else {
+  //   console.log(`Added ${title}`)
+  // }
 
   return result.reference.id
 }

@@ -19,9 +19,9 @@ const createDamage = async (damage: Damage, client: Client) => {
   if(!result) {
     console.log(damage)
   }
-  else {
-    console.log(`Added ${name}`)
-  }
+  // else {
+  //   console.log(`Added ${name}`)
+  // }
 
   return result.damage.id
 }
