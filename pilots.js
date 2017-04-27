@@ -18,7 +18,6 @@ const createPilot = async (pilot: Pilot, client: Client) => {
       image: "${image}",
       slots: [${slotsFix.toString()}],
       text: "${text.replace(/"/g, '&quote;')}",
-      faction: "${faction}",
       xws: "${xws}"
     ){
       id
@@ -28,9 +27,9 @@ const createPilot = async (pilot: Pilot, client: Client) => {
   if(!result) {
     console.log(`ERROR adding ${name}`)
   }
-  else {
-    console.log(`ADDED ${name}`)
-  }
+  // else {
+  //   console.log(`ADDED ${name}`)
+  // }
 
   return result.pilot.id
 }
@@ -46,6 +45,37 @@ const findPilot = async (pilot: Pilot, client: Client) => {
       id
     }
   }`)
+
+  return result
+}
+
+export const connectPilotsAndFaction = async(rawPilots, newPilots, rawFactions, newFactions, client) => {
+  return await map(rawPilots, async(pilot) => {
+    const newPilotId = newPilots[pilot.id]
+    const newFactionIds = chain(rawFactions)
+      .filter(faction => {
+        return pilot.faction.includes(faction.name)
+      })
+      .map(faction => {
+        return newFactions[faction.name]
+      })
+      .value()
+
+    return await map(newFactionIds, async(newFactionId) => {
+      const connectedPilot = await connectPilotsAndFactionsMutation(newPilotId, newFactionId, client)
+      return connectedPilot
+    })
+  })
+}
+
+const connectPilotsAndFactionsMutation = async(pilotId, factionId, client) => {
+  const result = await client.mutate(`{
+      addToPilotOnFaction(pilotsPilotId: "${pilotId}" factionFactionId: "${factionId}") {
+        factionFaction{
+          id
+        }
+      }
+    }`)
 
   return result
 }

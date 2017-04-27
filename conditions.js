@@ -20,9 +20,9 @@ const createCondition = async (condition: Condition, client: Client) => {
   if(!result) {
     console.log(condition)
   }
-  else {
-    console.log(`Added ${name}`)
-  }
+  // else {
+  //   console.log(`Added ${name}`)
+  // }
 
   return result.condition.id
 }

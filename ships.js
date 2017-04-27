@@ -2,16 +2,19 @@ import {zipObject, chain, map, filter} from 'lodash'
 
 // create ships
 const createShip = async (ship: Ship, client: Client) => {
+  const {id: oldId, name, attack = 0, agility = 0, hull = 0, shields = 0, actions = [], size, xws} = ship
+  const actionsFix =actions.map((action)=> `"${action}"`)
   const result = await client.mutate(`{
     ship: createShip(
-      oldId: ${ship.id},
-      name: "${ship.name}",
-      attack: ${ship.attack || 0},
-      agility: ${ship.agility},
-      hull: ${ship.hull},
-      shields: ${ship.shields},
-      size: "${ship.size}",
-      xws: "${ship.xws}"
+      oldId: ${oldId},
+      name: "${name}",
+      attack: ${attack || 0},
+      agility: ${agility},
+      hull: ${hull},
+      shields: ${shields},
+      actions: [${actionsFix.toString()}],
+      size: "${size}",
+      xws: "${xws}"
     ){
       id
     }
@@ -57,37 +60,6 @@ const connectShipsAndPilotsMutation = async(shipId, pilotId, client) => {
   const result = await client.mutate(`{
       addToShipPilots(shipShipId: "${shipId}" pilotsPilotId: "${pilotId}") {
         pilotsPilot{
-          id
-        }
-      }
-    }`)
-
-  return result
-}
-
-export const connectShipsAndFactions = async(rawShips, newShips, rawFactions, newFactions, client) => {
-  return await map(rawShips, async(ship) => {
-    const newShipId = newShips[ship.id]
-    const newFactionIds = chain(rawFactions)
-      .filter(faction => {
-        return ship.faction.includes(faction.name)
-      })
-      .map(faction => {
-        return newFactions[faction.name]
-      })
-      .value()
-
-    return await map(newFactionIds, async(newFactionId) => {
-      const connectedShip = await connectShipsAndFactionsMutation(newShipId, newFactionId, client)
-      return connectedShip
-    })
-  })
-}
-
-const connectShipsAndFactionsMutation = async(shipId, factionId, client) => {
-  const result = await client.mutate(`{
-      addToFactionShips(shipsShipId: "${shipId}" factionFactionId: "${factionId}") {
-        factionFaction{
           id
         }
       }
