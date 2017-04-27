@@ -63,7 +63,7 @@ const main = async() => {
 
   // ingest upgrades
   const createdUpgrades = await createUpgrades(rawUpgrades, client)
-  console.log(`Created ${createdUpgrades.length} new upgrades.`)
+  console.log(`Created ${Object.keys(createdUpgrades).length} new upgrades.`)
 
   // ingest conditions
   const createdConditions = await createConditions(rawConditions, client)

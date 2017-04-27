@@ -6,7 +6,8 @@ const convertToDateTimeString = (str) => new Date(Date.parse(str)).toISOString()
 // create products
 const createProduct = async (product: Product, client: Client) => {
   const {id: oldId, name, image, thumb, wave, released = false, contents = {}, sku, release_date: releaseDate, announcement_date: announceDate} = product
-
+  const releaseDateFix = releaseDate ? `releaseDate: "${convertToDateTimeString(releaseDate)}",` : ''
+  const announceDateFix = announceDate ? `announceDate: "${convertToDateTimeString(announceDate)}",` : ''
   const result = await client.mutate(`{
     product: createProduct(
       oldId: ${oldId},
@@ -16,8 +17,8 @@ const createProduct = async (product: Product, client: Client) => {
       wave: "${wave}",
       released: ${released},
       sku: "${sku}",
-      releaseDate: "${convertToDateTimeString(releaseDate)}",
-      announceDate: "${convertToDateTimeString(announceDate)}"
+      ${releaseDateFix}
+      ${announceDateFix}
     ){
       id
     }
