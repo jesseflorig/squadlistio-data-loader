@@ -47,11 +47,11 @@ const main = async() => {
   const createdFactions = await createFactions(rawFactions, client)
   console.log(`Created ${Object.keys(createdFactions).length} new factions.`)
 
-  // // ingest slots
-  // const allSlots = uniqFlatMap(rawPilots, 'slots')
-  // const rawSlots = slotListToObj(allSlots)
-  // const createdSlots = await createSlots(rawSlots, client)
-  // console.log(`Created ${Object.keys(createdSlots).length} new slots.`)
+  // ingest slots
+  const allSlots = uniqFlatMap(rawPilots, 'slots')
+  const rawSlots = slotListToObj(allSlots)
+  const createdSlots = await createSlots(rawSlots, client)
+  console.log(`Created ${Object.keys(createdSlots).length} new slots.`)
 
   // ingest ships
   const createdShips = await createShips(rawShips, client)
@@ -61,25 +61,25 @@ const main = async() => {
   const createdPilots = await createPilots(rawPilots, client)
   console.log(`Created ${Object.keys(createdPilots).length} new pilots.`)
 
-  // // ingest upgrades
-  // const createdUpgrades = await createUpgrades(rawUpgrades, client)
-  // console.log(`Created ${createdUpgrades.length} new upgrades.`)
-  //
-  // // ingest conditions
-  // const createdConditions = await createConditions(rawConditions, client)
-  // console.log(`Created ${Object.keys(createdConditions).length} new conditions.`)
-  //
-  // // ingest reference cards
-  // const createdReferences = await createReferences(rawReferences, client)
-  // console.log(`Created ${Object.keys(createdReferences).length} new reference cards.`)
-  //
-  // // ingest damage cards
-  // const createdDamages = await createDamages(rawDamages, client)
-  // console.log(`Created ${Object.keys(createdDamages).length} new damage cards.`)
+  // ingest upgrades
+  const createdUpgrades = await createUpgrades(rawUpgrades, client)
+  console.log(`Created ${createdUpgrades.length} new upgrades.`)
 
-  // // ingest products
-  // const createdProducts = await createProducts(rawProducts, client)
-  // console.log(`Created ${Object.keys(createdProducts).length} new products`)
+  // ingest conditions
+  const createdConditions = await createConditions(rawConditions, client)
+  console.log(`Created ${Object.keys(createdConditions).length} new conditions.`)
+
+  // ingest reference cards
+  const createdReferences = await createReferences(rawReferences, client)
+  console.log(`Created ${Object.keys(createdReferences).length} new reference cards.`)
+
+  // ingest damage cards
+  const createdDamages = await createDamages(rawDamages, client)
+  console.log(`Created ${Object.keys(createdDamages).length} new damage cards.`)
+
+  // ingest products
+  const createdProducts = await createProducts(rawProducts, client)
+  console.log(`Created ${Object.keys(createdProducts).length} new products`)
 
   // connect ships and pilots
   const connectedPilots = await connectShipsAndPilots(rawShips, createdShips, rawPilots, createdPilots, client)
