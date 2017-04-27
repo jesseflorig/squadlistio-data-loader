@@ -1,0 +1,158 @@
+﻿type Condition {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  image: String
+  name: String!
+  oldId: Int
+  text: String
+  unique: Boolean!
+  updatedAt: DateTime!
+  upgrade: Upgrade @relation(name: "UpgradeCondition")
+  xws: String
+}
+
+type Damage {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  qtyCore: Int!
+  qtyTFA: Int!
+  text: String!
+  type: String!
+  updatedAt: DateTime!
+}
+
+type Faction {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  parent: FACTION_PARENT
+  pilots: [Pilot!]! @relation(name: "PilotOnFaction")
+  updatedAt: DateTime!
+  xws: String
+}
+
+type File {
+  contentType: String!
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  secret: String! @isUnique
+  size: Int!
+  updatedAt: DateTime!
+  url: String! @isUnique
+}
+
+type Pilot {
+  createdAt: DateTime!
+  faction: Faction @relation(name: "PilotOnFaction")
+  id: ID! @isUnique
+  image: String
+  name: String!
+  oldId: Int
+  points: Int!
+  ship: Ship @relation(name: "ShipPilots")
+  skill: Int!
+  slots: [String!]!
+  squadItems: [SquadItem!]! @relation(name: "SquadItemOnPilot")
+  text: String!
+  unique: Boolean!
+  updatedAt: DateTime!
+  xws: String!
+}
+
+type Product {
+  announceDate: DateTime
+  contents: Json
+  createdAt: DateTime!
+  id: ID! @isUnique
+  image: String
+  name: String!
+  oldId: Int
+  releaseDate: DateTime
+  released: Boolean!
+  sku: String!
+  thumb: String
+  updatedAt: DateTime!
+  wave: String
+}
+
+type Reference {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  image: String
+  oldId: Int
+  subtitle: String
+  title: String!
+  updatedAt: DateTime!
+}
+
+type Ship {
+  actions: [String!]!
+  agility: Int!
+  attack: Int!
+  createdAt: DateTime!
+  hull: Int!
+  id: ID! @isUnique
+  maneuvers: [Int!]!
+  name: String!
+  oldId: Int
+  pilots: [Pilot!]! @relation(name: "ShipPilots")
+  shields: Int!
+  size: String!
+  squadItems: [SquadItem!]! @relation(name: "SquadItemOnShip")
+  updatedAt: DateTime!
+  xws: String!
+}
+
+type Slot {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  shorthand: String
+  updatedAt: DateTime!
+  upgrades: [Upgrade!]! @relation(name: "SlotUpgrades")
+  xws: String
+}
+
+type Squad {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  squadItems: [SquadItem!]! @relation(name: "SquadOnSquadItem")
+  updatedAt: DateTime!
+}
+
+type SquadItem {
+  createdAt: DateTime!
+  id: ID! @isUnique
+  pilot: Pilot @relation(name: "SquadItemOnPilot")
+  ship: Ship @relation(name: "SquadItemOnShip")
+  squad: Squad @relation(name: "SquadOnSquadItem")
+  updatedAt: DateTime!
+  upgrades: [Upgrade!]! @relation(name: "SquadItemOnUpgrade")
+}
+
+type Upgrade {
+  attack: Int
+  conditions: [Condition!]! @relation(name: "UpgradeCondition")
+  createdAt: DateTime!
+  id: ID! @isUnique
+  images: String
+  name: String!
+  oldId: Int
+  points: Int!
+  range: String
+  slot: Slot @relation(name: "SlotUpgrades")
+  squadItems: [SquadItem!]! @relation(name: "SquadItemOnUpgrade")
+  text: String
+  unique: Boolean!
+  updatedAt: DateTime!
+  xws: String!
+}
+
+type User {
+  auth0UserId: String @isUnique
+  createdAt: DateTime!
+  id: ID! @isUnique
+  updatedAt: DateTime!
+}
