@@ -5,7 +5,7 @@ import jsonloader from 'jsonloader'
 import config from 'config'
 import {createPilots, connectPilotsAndFaction} from './pilots'
 import {createShips, connectShipsAndPilots} from './ships'
-import {createUpgrades} from './upgrades'
+import {createUpgrades, connectUpgradesAndSlot} from './upgrades'
 import {createConditions} from './conditions'
 import {createFactions, factionListToObj} from './factions'
 import {createSlots, slotListToObj} from './slots'
@@ -48,7 +48,7 @@ const main = async() => {
   console.log(`Created ${Object.keys(createdFactions).length} new factions.`)
 
   // ingest slots
-  const allSlots = uniqFlatMap(rawPilots, 'slots')
+  const allSlots = uniqFlatMap(rawUpgrades, 'slot')
   const rawSlots = slotListToObj(allSlots)
   const createdSlots = await createSlots(rawSlots, client)
   console.log(`Created ${Object.keys(createdSlots).length} new slots.`)
@@ -88,6 +88,10 @@ const main = async() => {
   // connect ships and factions
   const connectedFactions = await connectPilotsAndFaction(rawPilots, createdPilots, rawFactions, createdFactions, client)
   console.log(`Created ${Object.keys(connectedFactions).length} new pilot -> faction connections`)
+
+  // connect upgrades and slots
+  const connectedUpgrades = await connectUpgradesAndSlot(rawUpgrades, createdUpgrades, rawSlots, createdSlots, client)
+  console.log(`Created ${Object.keys(connectedUpgrades).length} new upgrade -> slot connections`)
 
 }
 

@@ -29,7 +29,6 @@ const createFaction = async (faction: Faction, client: Client) => {
   // else {
   //   console.log(`Added ${name} faction`)
   // }
-
   return result.faction.id
 }
 
